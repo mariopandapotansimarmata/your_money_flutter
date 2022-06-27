@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "181051309149",
+    "project_id": "your-money-f8049",
+    "storage_bucket": "your-money-f8049.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181051309149:android:3d95a54002cbec3d68e1b4",
+        "android_client_info": {
+          "package_name": "com.example.your_money"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181051309149-j1k9qtcsce79t6q8ke8gvr60m3thitah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfrzAQgihaRZ-R4oERMt5BLK5uAEKZuP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181051309149-j1k9qtcsce79t6q8ke8gvr60m3thitah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
