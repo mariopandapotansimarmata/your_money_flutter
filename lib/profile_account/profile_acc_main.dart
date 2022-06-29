@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,7 +21,11 @@ class _ProfileMainState extends State<ProfileMain> {
             Padding(padding: const EdgeInsets.all(24.0), child: HeadingList()),
           ],
         ),
-        ElevatedButton(onPressed: () {}, child: Text("Logout"))
+        ElevatedButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+            child: Text("Logout"))
       ],
     );
   }

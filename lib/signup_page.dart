@@ -1,22 +1,18 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_import, implementation_imports, unused_import, avoid_web_libraries_in_flutter, use_build_context_synchronously
-
-//import 'dart:html';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:your_money/home_page_list/home_page.dart';
-import 'package:your_money/signup_page.dart';
+import 'package:your_money/auth_services.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUp extends StatefulWidget {
+  const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
   @override
@@ -42,15 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 80,
               ),
-              // StreamBuilder<User?>(
-              //     stream: FirebaseAuth.instance.userChanges(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.hasData) {
-              //         return Text("Signed In ${snapshot.data?.email}");
-              //       } else {
-              //         return Text("You haven't SignIn yet");
-              //       }
-              //     }),
+
               //-- Email Text FIeld
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -99,49 +87,43 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               //--sign in button
-              StreamBuilder<User?>(
+              ElevatedButton(
+                onPressed: () async {
+                  if (FirebaseAuth.instance.currentUser == null) {
+                    try {
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: emailController.text,
+                              password: passwordController.text);
+                    } on FirebaseAuthException catch (e) {
+                      showNotification(context, e.message.toString());
+                    }
+                  } else {
+                    await FirebaseAuth.instance.signOut();
+                  }
+
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(builder: (context) => const HomePage()),
                   // );
-                  stream: FirebaseAuth.instance.userChanges(),
-                  builder: (context, snapshot) {
-                    return ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text);
-                        } on FirebaseAuthException catch (e) {
-                          showNotification(context, e.message.toString());
-                        }
-
-                        // if (snapshot.hasData) {
-                        //   await Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const HomePage()),
-                        //   );
-                        // } // else {
-                        //   return Text("You haven't SignIn yet");
-                        // }
-                        // Navigator.pushAndRemoveUntil(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const HomePage()),
-                        //     (Route<dynamic> route) => false);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size(250, 50),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(15.0))),
-                      child: Text(
-                        "Sign In",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }),
+                },
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(250, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(15.0))),
+                child: StreamBuilder<User?>(
+                    stream: FirebaseAuth.instance.userChanges(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return const Text("Sign Out");
+                      } else {
+                        return Text(
+                          "Register",
+                          style: TextStyle(color: Colors.white),
+                        );
+                      }
+                    }),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -151,12 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Text("Don't Have an account? "),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                      );
-                    },
+                    onTap: () {},
                     child: Text(
                       "Register",
                       style: TextStyle(
