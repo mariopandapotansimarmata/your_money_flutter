@@ -1,17 +1,28 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_import, implementation_imports
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class ListTransaction extends StatefulWidget {
-  const ListTransaction({Key? key}) : super(key: key);
+class ListTransaction extends StatelessWidget {
+  ListTransaction(
+      {Key? key,
+      required this.amount,
+      required this.category,
+      required this.date,
+      required this.note,
+      required this.title})
+      : super(key: key);
+  final String? amount;
+  final String? category;
+  final String? date;
+  final String? note;
+  final String? title;
 
-  @override
-  State<ListTransaction> createState() => _ListTransactionState();
-}
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-class _ListTransactionState extends State<ListTransaction> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,43 +35,48 @@ class _ListTransactionState extends State<ListTransaction> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.food_bank,
-                    size: 40,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(children: [
-                    Text(
-                      "KFC",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Food",
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
-                    )
-                  ]),
-                ],
-              ),
+              StreamBuilder(
+                  stream: firestore.collection('users').snapshots(),
+                  builder: (_, snapshots) {
+                    if (snapshots.hasData) {}
+                    return Row(
+                      children: [
+                        Icon(
+                          Icons.food_bank,
+                          size: 40,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(children: [
+                          Text(
+                            "$note",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "$category",
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          )
+                        ]),
+                      ],
+                    );
+                  }),
               Column(
                 children: [
                   Text(
-                    "Rp. 50.000",
+                    "Rp $amount",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 5,
                   ),
-                  Text("17/8/2022")
+                  Text("$date")
                 ],
               ),
             ],

@@ -24,9 +24,10 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 31
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -72,4 +73,3 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
 
 }
-apply plugin: 'com.google.gms.google-services'
